@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Campaign - CrowdFund</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="add-campaign-page">
+  <nav class="navbar">
+  <div class="logo">CrowdFund</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="browse.html">Browse</a></li>
+    <li><a href="add-campaign.html">Add Campaign</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+
+  <div class="form-container">
+    <h2>Add New Campaign</h2>
+    <form id="addCampaignForm">
+      <label>Title:</label>
+      <input type="text" id="title" required>
+
+      <label>Description:</label>
+      <textarea id="description" required></textarea>
+
+      <label>Goal Amount (₹):</label>
+      <input type="number" id="goal" required>
+
+      <label>Image URL:</label>
+      <input type="text" id="image_url" placeholder="Paste image link" required>
+
+      <button type="submit">Create Campaign</button>
+    </form>
+    <p id="msg"></p>
+  </div>
+
+  <script>
+    document.getElementById("addCampaignForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      const goal = document.getElementById("goal").value;
+      const image_url = document.getElementById("image_url").value;
+
+      const res = await fetch("http://localhost:5000/add-campaign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description, goal, image_url })
+      });
+
+      const data = await res.json();
+      document.getElementById("msg").textContent = data.message;
+
+      if (res.ok) {
+        document.getElementById("addCampaignForm").reset();
+      }
+    });
+  </script>
+</body>
+</html>
